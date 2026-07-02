@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="wa-theme-default wa-palette-default wa-brand-red">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLC Content Forge — Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://ka-f.webawesome.com/webawesome@3.9.0/styles/themes/default.css">
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/icon/icon.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/input/input.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/select/select.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/option/option.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/textarea/textarea.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/button/button.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/badge/badge.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/avatar/avatar.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/dropdown/dropdown.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/dropdown-item/dropdown-item.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/dialog/dialog.js"></script>
+<style>
+  :root {
+    --wa-color-brand-50: oklch(50% 0.18 30);
+    --wa-color-brand-60: oklch(42% 0.16 30);
+    --wa-font-family-heading: 'Playfair Display', serif;
+    --wa-font-family-sans: 'DM Sans', -apple-system, sans-serif;
+    --wa-radius-s: 6px;
+    --wa-radius-m: 8px;
+    --wa-radius-l: 12px;
+    --wa-radius-xl: 16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: #fafaf9;
+    color: #1c1917;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+  .sidebar {
+    width: 250px;
+    background: #ffffff;
+    border-right: 1px solid #e8e2dc;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px 40px;
+    flex-shrink: 0;
+  }
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 20px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #f0ebe5;
+  }
+  .brand-logo { height: 28px; }
+  .brand-logo img { height: 100%; width: auto; display: block; }
+  .brand-divider { width: 1px; height: 24px; background: #e0d8d0; }
+  .brand-sub {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #787168;
+  }
+  .brand-sub span { color: #b48c50; }
+  .nav-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #a39a90;
+    padding: 0 8px;
+    margin-bottom: 8px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #787168;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    text-decoration: none;
+  }
+  .nav-item:hover { background: #f0ebe5; color: #1c1917; }
+  .nav-item.active {
+    background: #f0ebe5;
+    color: #c0392b;
+  }
+  .nav-item wa-icon,
+  .nav-item i.fa-regular { font-size: 15px; width: 20px; color: #a39a90; }
+  .nav-item.active wa-icon,
+  .nav-item.active i.fa-regular { color: #c0392b; }
+  .nav-item:hover wa-icon,
+  .nav-item:hover i.fa-regular { color: #787168; }
+  .nav-spacer { flex: 1; }
+  .sidebar-footer {
+    padding: 16px 8px 0;
+    border-top: 1px solid #f0ebe5;
+    margin-top: 8px;
+  }
+  .sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #f0ebe5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #787168;
+  }
+  .user-info { flex: 1; }
+  .user-name { font-size: 13px; font-weight: 600; color: #1c1917; }
+  .user-role {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #b48c50;
+    font-weight: 600;
+  }
+  .logout-btn::part(base) { color: #a39a90; font-size: 15px; }
+  .logout-btn::part(base):hover { color: #1c1917; }
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+    border-bottom: 1px solid #e8e2dc;
+    background: #ffffff;
+  }
+  .topbar h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 24px; }
+
+  .topbar-icon { color: #a39a90; font-size: 16px; cursor: pointer; transition: color 0.12s; }
+  .topbar-icon:hover { color: #787168; }
+  .content {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-content: start;
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid #e8e2dc;
+    border-radius: 12px;
+    padding: 24px;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .card.full { grid-column: 1 / -1; }
+  .card-title { font-size: 14px; font-weight: 600; color: #1c1917; margin-bottom: 4px; }
+  .card-sub { font-size: 13px; color: #787168; margin-bottom: 20px; }
+  .stat-row { display: flex; gap: 40px; }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 500;
+    font-family: 'Playfair Display', serif;
+    color: #c0392b;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #a39a90;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .btn-row { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .gen-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0ebe5;
+  }
+  .gen-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .gen-title { font-size: 14px; font-weight: 500; color: #1c1917; margin-bottom: 2px; }
+  .gen-meta { font-size: 12px; color: #a39a90; }
+  .gen-meta wa-icon { margin-right: 4px; }
+  .gen-status {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .gen-status.approved {
+    background: #edf7ed;
+    color: #2e7d32;
+  }
+  .gen-status.generated {
+    background: #fff8e1;
+    color: #b48c50;
+  }
+  .gen-status.exported {
+    background: #e8eaf6;
+    color: #3f51b5;
+  }
+  .gen-right { display: flex; align-items: center; gap: 12px; }
+  .gen-actions { color: #a39a90; font-size: 14px; cursor: pointer; padding: 4px; }
+  .gen-actions:hover { color: #1c1917; }
+  .watermark {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    text-align: center;
+    padding: 8px;
+    font-size: 10px;
+    color: #a39a90;
+    letter-spacing: 0.04em;
+    background: rgba(250,250,249,0.85);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    border-top: 1px solid #e8e2dc;
+  }
+  .role-switch-wrap { position: relative; }
+  .topbar-btn-group { display: flex; gap: 8px; }
+  .role-switch-wrap wa-dropdown-item[checked] { color: oklch(50% 0.18 30); }
+  /* Dialog (modal) */
+  wa-dialog.modal-dialog { --width: 520px; }
+  wa-dialog.modal-dialog::part(title) {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  wa-dialog.modal-dialog .modal-body { padding: 0; }
+  wa-dialog.modal-dialog .field-group { margin-bottom: 20px; }
+  wa-dialog.modal-dialog label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #787168;
+    margin-bottom: 6px;
+  }
+  wa-dialog.modal-dialog wa-input,
+  wa-dialog.modal-dialog wa-select,
+  wa-dialog.modal-dialog wa-textarea { width: 100%; }
+  wa-dialog.modal-dialog wa-input::part(base),
+  wa-dialog.modal-dialog wa-select::part(base),
+  wa-dialog.modal-dialog wa-textarea::part(base) {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border-radius: 8px;
+    border-color: #e0d8d0;
+  }
+  wa-dialog.modal-dialog .modal-footer { gap: 10px; }
+  /* Theme Switcher */
+  .theme-switch-wrap { position: relative; }
+  .theme-btn::part(base) {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; color: #787168;
+    border: 1px solid #e0d8d0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .theme-btn::part(base):hover { background: #f0ebe5; color: #1c1917; }
+  .theme-btn i { font-size: 11px; }
+  .role-btn::part(base) {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; color: #787168;
+    border: 1px solid #e0d8d0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .role-btn::part(base):hover { background: #f0ebe5; color: #1c1917; }
+  .role-btn i { font-size: 11px; }
+  .theme-switch-wrap .theme-swatch {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #e0d8d0;
+  }
+  /* ── Mobile responsive ── */
+  .mobile-menu-btn { display: none; }
+  .sidebar-backdrop { display: none; }
+  @media (max-width: 768px) {
+    .mobile-menu-btn { display: inline-flex; }
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+    }
+    .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.1); }
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 99;
+    }
+    .sidebar-backdrop.show { display: block; }
+    .content {
+      grid-template-columns: 1fr !important;
+      padding: 16px;
+    }
+    .card.full { grid-column: 1; }
+    .stat-row { flex-direction: column; gap: 16px; }
+    .topbar { padding: 12px 16px; }
+    .topbar-right { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <img src="https://www.blc.solutions/wp-content/uploads/2021/03/BLC-Language-Solutions-JPG.jpg" alt="BLC" onerror="this.style.display='none'">
+    </div>
+    <div class="brand-divider"></div>
+    <div class="brand-sub">Content <span>Forge</span></div>
+  </div>
+  <div class="nav-label">Main</div>
+  <div class="nav-item active" onclick="closeMobileMenu()"><i class="fa-regular fa-th-large"></i> Dashboard</div>
+  <div class="nav-item" onclick="closeMobileMenu()"><wa-icon name="plus"></wa-icon> New Generation</div>
+  <div class="nav-item" onclick="closeMobileMenu()"><wa-icon name="file-pen"></wa-icon> My Materials</div>
+  <div class="nav-item" onclick="closeMobileMenu()"><wa-icon name="file-export"></wa-icon> Exports</div>
+  <div class="nav-spacer"></div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <wa-avatar label="Sarah Chen" initials="SC" class="avatar"></wa-avatar>
+      <div class="user-info">
+        <div class="user-name">Sarah Chen</div>
+        <div class="user-role">Trainer</div>
+      </div>
+      <wa-button appearance="plain" class="logout-btn" onclick="window.location.href='login.html'" title="Sign out"><wa-icon name="arrow-right-from-bracket"></wa-icon></wa-button>
+    </div>
+  </div>
+</div>
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileMenu()"></div>
+<div class="main">
+  <div class="topbar">
+    <wa-button appearance="plain" class="mobile-menu-btn" onclick="toggleMobileMenu()" title="Menu">
+      <wa-icon name="bars"></wa-icon>
+    </wa-button>
+    <h2>Dashboard</h2>
+    <div class="topbar-right">
+      <wa-icon name="bell" class="topbar-icon"></wa-icon>
+      <div class="topbar-btn-group">
+      <wa-dropdown placement="bottom-end" class="role-switch-wrap">
+        <wa-button slot="trigger" appearance="plain" class="role-btn" with-caret title="Switch role"><wa-icon name="graduation-cap"></wa-icon> Trainer</wa-button>
+        <wa-dropdown-item type="checkbox" checked onclick="switchRole('trainer')">
+          <wa-icon slot="icon" name="graduation-cap"></wa-icon>
+          Trainer
+          <span slot="details">Create and manage content</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="switchRole('manager')">
+          <wa-icon slot="icon" name="user-tie"></wa-icon>
+          Manager
+          <span slot="details">Oversee team activity</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="switchRole('admin')">
+          <wa-icon slot="icon" name="shield"></wa-icon>
+          Administrator
+          <span slot="details">System configuration</span>
+        </wa-dropdown-item>
+      </wa-dropdown>
+      <wa-dropdown placement="bottom-end" class="theme-switch-wrap">
+        <wa-button slot="trigger" appearance="plain" class="theme-btn" with-caret title="Switch theme"><wa-icon name="palette"></wa-icon> Theme</wa-button>
+        <wa-dropdown-item type="checkbox" checked onclick="setTheme('blc')">
+          <span slot="icon" class="theme-swatch" style="background:#c0392b;"></span>
+          BLC
+          <span slot="details">White · Red · Gold</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('nord')">
+          <span slot="icon" class="theme-swatch" style="background:#3498db;"></span>
+          Nord
+          <span slot="details">Cool · Minimal · Blue</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('forest')">
+          <span slot="icon" class="theme-swatch" style="background:#4a7c3f;"></span>
+          Forest
+          <span slot="details">Earthy · Green · Warm</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('midnight')">
+          <span slot="icon" class="theme-swatch" style="background:#7c6cf0;"></span>
+          Midnight
+          <span slot="details">Dark · Indigo · Glow</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('vintage')">
+          <span slot="icon" class="theme-swatch" style="background:#7a1f1f;"></span>
+          Vintage
+          <span slot="details">Paper · Burgundy · Serif</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('sunset')">
+          <span slot="icon" class="theme-swatch" style="background:#e85d4a;"></span>
+          Sunset
+          <span slot="details">Coral · Warm · Bold</span>
+        </wa-dropdown-item>
+      </wa-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="card">
+      <div class="card-title">Your Activity</div>
+      <div class="card-sub">Overview of your generated materials</div>
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-value">12</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">8</div>
+          <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Exported</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+      <div class="card-title">Start Creating</div>
+      <div class="card-sub">Generate new classroom materials</div>
+      <div class="btn-row">
+        <wa-button variant="brand" onclick="openLangModal()"><wa-icon name="pen-to-square"></wa-icon> Language Exercise</wa-button>
+        <wa-button variant="brand" onclick="openOccModal()"><wa-icon name="briefcase"></wa-icon> Occupational Scenario</wa-button>
+      </div>
+    </div>
+    <div class="card full">
+      <div class="card-title">Recent Content</div>
+      <div class="card-sub">Your most recently generated materials</div>
+      <div class="gen-item">
+        <div>
+          <div class="gen-title">Unit 4 — Modal Verbs Practice</div>
+          <div class="gen-meta"><wa-icon name="pen-to-square"></wa-icon> Language Practice · Updated 2h ago</div>
+        </div>
+        <div class="gen-right">
+          <wa-badge variant="success"><wa-icon name="check"></wa-icon> Approved</wa-badge>
+          <wa-icon name="ellipsis-vertical" class="gen-actions"></wa-icon>
+        </div>
+      </div>
+      <div class="gen-item">
+        <div>
+          <div class="gen-title">Negotiation Role-play: Supplier Meeting</div>
+          <div class="gen-meta"><wa-icon name="briefcase"></wa-icon> Professional Scenario · Updated yesterday</div>
+        </div>
+        <div class="gen-right">
+          <wa-badge variant="warning"><wa-icon name="clock"></wa-icon> Generated</wa-badge>
+          <wa-icon name="ellipsis-vertical" class="gen-actions"></wa-icon>
+        </div>
+      </div>
+      <div class="gen-item" style="border-bottom: none; padding-bottom: 0;">
+        <div>
+          <div class="gen-title">Past Simple vs Present Perfect Worksheet</div>
+          <div class="gen-meta"><wa-icon name="pen-to-square"></wa-icon> Language Practice · Updated 3 days ago</div>
+        </div>
+        <div class="gen-right">
+          <wa-badge variant="brand"><wa-icon name="check-circle"></wa-icon> Exported</wa-badge>
+          <wa-icon name="ellipsis-vertical" class="gen-actions"></wa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function switchRole(role) {
+  var pages = { trainer: 'trainer-shell.html', manager: 'manager-shell.html', admin: 'admin-shell.html' };
+  if (role === 'trainer') return;
+  window.location.href = pages[role];
+}
+function openLangModal() { document.getElementById('langModal').open = true; }
+function closeLangModal() { document.getElementById('langModal').open = false; }
+function openOccModal() { document.getElementById('occModal').open = true; }
+function closeOccModal() { document.getElementById('occModal').open = false; }
+function setTheme(name) {
+  var link = document.getElementById('theme-css');
+  if (!link) {
+    link = document.createElement('link');
+    link.id = 'theme-css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }
+  if (name === 'blc') { link.href = ''; }
+  else { link.href = 'themes/' + name + '.css'; }
+}
+</script>
+<!-- Language Exercise Modal -->
+<wa-dialog id="langModal" label="New Language Exercise" light-dismiss with-footer class="modal-dialog">
+  <wa-icon slot="header-actions" name="pen-to-square" style="color:var(--wa-color-brand-50);margin-right:4px;"></wa-icon>
+  <div class="modal-body">
+    <div class="field-group">
+      <label for="topic">Topic</label>
+      <wa-input type="text" id="topic" placeholder="e.g. Modal Verbs, Email Etiquette"></wa-input>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="participants">Number of Participants</label>
+        <wa-input type="number" id="participants" value="6" min="1" max="50"></wa-input>
+      </div>
+      <div class="field-group">
+        <label for="level">Target Level</label>
+        <wa-select id="level">
+          <wa-option value="">Select level…</wa-option>
+          <wa-option value="A1">A1 — Beginner</wa-option>
+          <wa-option value="A2">A2 — Elementary</wa-option>
+          <wa-option value="B1">B1 — Intermediate</wa-option>
+          <wa-option value="B2">B2 — Upper Intermediate</wa-option>
+          <wa-option value="C1">C1 — Advanced</wa-option>
+          <wa-option value="C2">C2 — Proficient</wa-option>
+        </wa-select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="classroom">Classroom Exercises</label>
+        <wa-input type="number" id="classroom" value="3" min="0" max="20"></wa-input>
+      </div>
+      <div class="field-group" style="margin-bottom:0;">
+        <label for="selfstudy">Self-Study Exercises</label>
+        <wa-input type="number" id="selfstudy" value="5" min="0" max="30"></wa-input>
+      </div>
+    </div>
+  </div>
+  <div slot="footer" class="modal-footer">
+    <wa-button variant="neutral" onclick="closeLangModal()">Cancel</wa-button>
+    <wa-button variant="brand" onclick="alert('Generation flow — not yet implemented')">
+      <i class="fa-regular fa-wand-magic-sparkles"></i> Generate
+    </wa-button>
+  </div>
+</wa-dialog>
+<!-- Occupational Scenario Modal -->
+<wa-dialog id="occModal" label="New Occupational Scenario" light-dismiss with-footer class="modal-dialog">
+  <wa-icon slot="header-actions" name="briefcase" style="color:var(--wa-color-brand-50);margin-right:4px;"></wa-icon>
+  <div class="modal-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="occ-company">Company</label>
+        <wa-select id="occ-company">
+          <wa-option value="">Select company…</wa-option>
+          <wa-option value="Adidas">Adidas</wa-option>
+          <wa-option value="BASF">BASF</wa-option>
+          <wa-option value="Bayer">Bayer</wa-option>
+          <wa-option value="BMW">BMW</wa-option>
+          <wa-option value="Bosch">Bosch</wa-option>
+          <wa-option value="Mercedes-Benz">Mercedes-Benz</wa-option>
+          <wa-option value="Siemens">Siemens</wa-option>
+          <wa-option value="ThyssenKrupp">ThyssenKrupp</wa-option>
+          <wa-option value="Volkswagen">Volkswagen</wa-option>
+          <wa-option value="Zalando">Zalando</wa-option>
+        </wa-select>
+      </div>
+      <div class="field-group">
+        <label for="occ-dept">Department / Occupation</label>
+        <wa-input type="text" id="occ-dept" placeholder="e.g. Logistics Manager, HR"></wa-input>
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="occ-scenario">Scenario Example</label>
+      <wa-input type="text" id="occ-scenario" placeholder="e.g. Supplier negotiation, onboarding meeting"></wa-input>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="occ-participants">Number of Participants</label>
+        <wa-input type="number" id="occ-participants" value="6" min="1" max="50"></wa-input>
+      </div>
+      <div class="field-group">
+        <label for="occ-level">Target Level</label>
+        <wa-select id="occ-level">
+          <wa-option value="">Select level…</wa-option>
+          <wa-option value="A1">A1 — Beginner</wa-option>
+          <wa-option value="A2">A2 — Elementary</wa-option>
+          <wa-option value="B1">B1 — Intermediate</wa-option>
+          <wa-option value="B2">B2 — Upper Intermediate</wa-option>
+          <wa-option value="C1">C1 — Advanced</wa-option>
+          <wa-option value="C2">C2 — Proficient</wa-option>
+        </wa-select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="occ-classroom">Classroom Exercises</label>
+        <wa-input type="number" id="occ-classroom" value="3" min="0" max="20"></wa-input>
+      </div>
+      <div class="field-group" style="margin-bottom:0;">
+        <label for="occ-selfstudy">Self-Study Exercises</label>
+        <wa-input type="number" id="occ-selfstudy" value="5" min="0" max="30"></wa-input>
+      </div>
+    </div>
+    <div class="field-group" style="margin-bottom:0;">
+      <label for="occ-vocab">Additional Specialist Vocabulary Request</label>
+      <wa-textarea id="occ-vocab" rows="3" placeholder="e.g. technical terms, industry jargon, specific phrases to include…"></wa-textarea>
+    </div>
+  </div>
+  <div slot="footer" class="modal-footer">
+    <wa-button variant="neutral" onclick="closeOccModal()">Cancel</wa-button>
+    <wa-button variant="brand" onclick="alert('Generation flow — not yet implemented')">
+      <i class="fa-regular fa-wand-magic-sparkles"></i> Generate
+    </wa-button>
+  </div>
+</wa-dialog>
+<div class="watermark">Illustrative prototype — not indicative of final functionality</div>
+</body>
+</html>

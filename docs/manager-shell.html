@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en" class="wa-theme-default wa-palette-default wa-brand-red">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLC Content Forge — Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://ka-f.webawesome.com/webawesome@3.9.0/styles/themes/default.css">
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/icon/icon.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/input/input.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/select/select.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/option/option.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/textarea/textarea.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/button/button.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/badge/badge.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/avatar/avatar.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/dropdown/dropdown.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/dropdown-item/dropdown-item.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/dialog/dialog.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/checkbox/checkbox.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  :root {
+    --wa-color-brand-50: oklch(50% 0.18 30);
+    --wa-color-brand-60: oklch(42% 0.16 30);
+    --wa-font-family-heading: 'Playfair Display', serif;
+    --wa-font-family-sans: 'DM Sans', -apple-system, sans-serif;
+    --wa-radius-s: 6px;
+    --wa-radius-m: 8px;
+    --wa-radius-l: 12px;
+    --wa-radius-xl: 16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: #fafaf9;
+    color: #1c1917;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+  .sidebar {
+    width: 250px;
+    background: #ffffff;
+    border-right: 1px solid #e8e2dc;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px 40px;
+    flex-shrink: 0;
+  }
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 20px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #f0ebe5;
+  }
+  .brand-logo { height: 28px; }
+  .brand-logo img { height: 100%; width: auto; display: block; }
+  .brand-divider { width: 1px; height: 24px; background: #e0d8d0; }
+  .brand-sub { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 14px; color: #787168; }
+  .brand-sub span { color: #b48c50; }
+  .nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #a39a90; padding: 0 8px; margin-bottom: 8px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 8px;
+    border-radius: 6px; font-size: 14px; font-weight: 500; color: #787168;
+    cursor: pointer; transition: background 0.12s, color 0.12s;
+  }
+  .nav-item:hover { background: #f0ebe5; color: #1c1917; }
+  .nav-item.active { background: #f0ebe5; color: #c0392b; }
+  .nav-item wa-icon,
+  .nav-item i.fa-regular { font-size: 15px; width: 20px; text-align: center; color: #a39a90; }
+  .nav-item.active wa-icon,
+  .nav-item.active i.fa-regular { color: #c0392b; }
+  .nav-item:hover wa-icon,
+  .nav-item:hover i.fa-regular { color: #787168; }
+  .nav-spacer { flex: 1; }
+  .sidebar-footer { padding: 16px 8px 0; border-top: 1px solid #f0ebe5; margin-top: 8px; }
+  .sidebar-user { display: flex; align-items: center; gap: 10px; }
+  .avatar {
+    width: 32px; height: 32px; border-radius: 8px; background: #f0ebe5;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: #787168;
+  }
+  .user-info { flex: 1; }
+  .user-name { font-size: 13px; font-weight: 600; color: #1c1917; }
+  .user-role { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #2e7d32; font-weight: 600; }
+  .logout-btn::part(base) {
+    background: none; border: none; color: #a39a90;
+    font-size: 15px; padding: 4px;
+    transition: color 0.12s;
+  }
+  .logout-btn::part(base):hover { color: #1c1917; }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 32px; border-bottom: 1px solid #e8e2dc; background: #ffffff;
+  }
+  .topbar h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+  .topbar-right { display: flex; align-items: center; gap: 24px; }
+  .topbar-icon { color: #a39a90; font-size: 16px; cursor: pointer; transition: color 0.12s; }
+  .topbar-icon:hover { color: #787168; }
+  .content { flex: 1; padding: 32px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-content: start; }
+  .card { background: #ffffff; border: 1px solid #e8e2dc; border-radius: 12px; padding: 24px; transition: box-shadow 0.2s; }
+  .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .card.full { grid-column: 1 / -1; }
+  .card-title { font-size: 14px; font-weight: 600; color: #1c1917; margin-bottom: 4px; }
+  .card-sub { font-size: 13px; color: #787168; margin-bottom: 20px; }
+  .stat-row { display: flex; gap: 40px; }
+  .stat-value { font-size: 28px; font-weight: 500; font-family: 'Playfair Display', serif; color: #c0392b; line-height: 1; }
+  .stat-label { font-size: 11px; color: #a39a90; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-top: 4px; }
+  .period-toggle {
+    display: flex; gap: 4px; margin-bottom: 16px;
+  }
+  .period-btn {
+    font-size: 12px; font-weight: 500; padding: 4px 12px;
+    border-radius: 4px; border: 1px solid #e0d8d0; background: #ffffff;
+    color: #787168; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .period-btn:hover { border-color: #c9bcaa; }
+  .period-btn.active { background: #f0ebe5; border-color: #c9bcaa; color: #1c1917; }
+
+  .chart-wrap { position: relative; height: 180px; margin-top: 8px; }
+  .log-entry {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 0; border-bottom: 1px solid #f0ebe5;
+    font-size: 13px;
+  }
+  .log-entry:last-child { border-bottom: none; padding-bottom: 0; }
+  .log-time { color: #a39a90; min-width: 56px; font-size: 12px; }
+  .log-action { color: #787168; }
+  .log-action strong { color: #1c1917; font-weight: 600; }
+  .log-icon { width: 24px; text-align: center; color: #a39a90; font-size: 13px; }
+  .watermark {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    text-align: center;
+    padding: 8px;
+    font-size: 10px;
+    color: #a39a90;
+    letter-spacing: 0.04em;
+    background: rgba(250,250,249,0.85);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    border-top: 1px solid #e8e2dc;
+  }
+  .role-switch-wrap { position: relative; }
+  .topbar-btn-group { display: flex; gap: 8px; }
+  .role-switch-wrap wa-dropdown-item[checked] { color: oklch(50% 0.18 30); }
+  /* Dialog (modal) */
+  wa-dialog.modal-dialog { --width: 520px; }
+  wa-dialog.modal-dialog::part(title) {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  wa-dialog.modal-dialog::part(title) wa-icon { color: var(--wa-color-brand-50); font-size: 18px; }
+  wa-dialog.modal-dialog::part(title) span { display: inline-flex; align-items: center; gap: 8px; }
+  wa-dialog.modal-dialog .modal-body { padding: 0; }
+  wa-dialog.modal-dialog .field-group { margin-bottom: 20px; }
+  wa-dialog.modal-dialog label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #787168;
+    margin-bottom: 6px;
+  }
+  wa-dialog.modal-dialog wa-input,
+  wa-dialog.modal-dialog wa-select,
+  wa-dialog.modal-dialog wa-textarea { width: 100%; }
+  wa-dialog.modal-dialog wa-input::part(base),
+  wa-dialog.modal-dialog wa-select::part(base),
+  wa-dialog.modal-dialog wa-textarea::part(base) {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border-radius: 8px;
+    border-color: #e0d8d0;
+  }
+  wa-dialog.modal-dialog .modal-footer { gap: 10px; }
+  /* CRUD tables */
+  .crud-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .crud-toolbar h4 { margin: 0; font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 500; color: #1c1917; }
+  .crud-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .crud-table th {
+    text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #787168; padding: 10px 12px;
+    border-bottom: 1px solid #e0d8d0;
+  }
+  .crud-table td { padding: 10px 12px; border-bottom: 1px solid #f0ebe5; color: #1c1917; }
+  .crud-table tbody tr:last-child td { border-bottom: none; }
+  .crud-table tbody tr:hover td { background: #fafaf9; }
+  .crud-actions { display: flex; gap: 4px; justify-content: flex-end; }
+  .crud-empty { padding: 32px; text-align: center; color: #a39a90; font-size: 13px; }
+  .crud-role-group { display: flex; flex-direction: column; gap: 4px; }
+  .crud-role-group wa-checkbox { font-size: 13px; }
+  /* Theme Switcher */
+  .theme-switch-wrap { position: relative; }
+  .theme-btn::part(base) {
+    font-size: 13px; font-weight: 500; color: #787168;
+    background: none; border: 1px solid #e0d8d0;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.12s, color 0.12s;
+    padding: 6px 12px; border-radius: 6px;
+  }
+  .theme-btn::part(base):hover { background: #f0ebe5; color: #1c1917; }
+  .role-btn::part(base) {
+    font-size: 13px; font-weight: 500; color: #787168;
+    background: none; border: 1px solid #e0d8d0;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.12s, color 0.12s;
+    padding: 6px 12px; border-radius: 6px;
+  }
+  .role-btn::part(base):hover { background: #f0ebe5; color: #1c1917; }
+  .theme-switch-wrap .theme-swatch {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #e0d8d0;
+  }
+  /* ── Mobile responsive ── */
+  .mobile-menu-btn { display: none; }
+  .sidebar-backdrop { display: none; }
+  @media (max-width: 768px) {
+    .mobile-menu-btn { display: inline-flex; }
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+    }
+    .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.1); }
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 99;
+    }
+    .sidebar-backdrop.show { display: block; }
+    .content {
+      grid-template-columns: 1fr !important;
+      padding: 16px;
+    }
+    .card.full { grid-column: 1; }
+    .stat-row { flex-direction: column; gap: 16px; }
+    .topbar { padding: 12px 16px; }
+    .topbar-right { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <img src="https://www.blc.solutions/wp-content/uploads/2021/03/BLC-Language-Solutions-JPG.jpg" alt="BLC" onerror="this.style.display='none'">
+    </div>
+    <div class="brand-divider"></div>
+    <div class="brand-sub">Content <span>Forge</span></div>
+  </div>
+  <div class="nav-label">Management</div>
+  <div class="nav-item active" onclick="closeMobileMenu()"><i class="fa-regular fa-th-large"></i> Dashboard</div>
+  <div class="nav-item" onclick="closeMobileMenu()"><wa-icon name="users"></wa-icon> Team Activity</div>
+  <div class="nav-item" onclick="closeMobileMenu();openUsersModal()"><wa-icon name="user-gear"></wa-icon> Users</div>
+  <div class="nav-item" onclick="closeMobileMenu();openClientsModal()"><wa-icon name="building"></wa-icon> Clients</div>
+  <div class="nav-item" onclick="closeMobileMenu()"><wa-icon name="chart-simple"></wa-icon> Reports</div>
+  <div class="nav-item" onclick="closeMobileMenu()"><wa-icon name="list"></wa-icon> Logs</div>
+  <div class="nav-spacer"></div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <wa-avatar label="James Mitchell" initials="JM" class="avatar"></wa-avatar>
+      <div class="user-info">
+        <div class="user-name">James Mitchell</div>
+        <div class="user-role">Manager</div>
+      </div>
+      <wa-button appearance="plain" class="logout-btn" onclick="window.location.href='login.html'" title="Sign out"><wa-icon name="arrow-right-from-bracket"></wa-icon></wa-button>
+    </div>
+  </div>
+</div>
+<div class="main">
+  <div class="topbar">
+    <h2>Dashboard</h2>
+    <div class="topbar-right">
+      <wa-icon name="bell" class="topbar-icon"></wa-icon>
+      <div class="topbar-btn-group">
+      <wa-dropdown placement="bottom-end" class="role-switch-wrap">
+        <wa-button slot="trigger" appearance="plain" class="role-btn" with-caret title="Switch role"><wa-icon name="user-tie"></wa-icon> Manager</wa-button>
+        <wa-dropdown-item onclick="switchRole('trainer')">
+          <wa-icon slot="icon" name="graduation-cap"></wa-icon>
+          Trainer
+          <span slot="details">Create and manage content</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item type="checkbox" checked onclick="switchRole('manager')">
+          <wa-icon slot="icon" name="user-tie"></wa-icon>
+          Manager
+          <span slot="details">Oversee team activity</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="switchRole('admin')">
+          <wa-icon slot="icon" name="shield"></wa-icon>
+          Administrator
+          <span slot="details">System configuration</span>
+        </wa-dropdown-item>
+      </wa-dropdown>
+      <wa-dropdown placement="bottom-end" class="theme-switch-wrap">
+        <wa-button slot="trigger" appearance="plain" class="theme-btn" with-caret title="Switch theme"><wa-icon name="palette"></wa-icon> Theme</wa-button>
+        <wa-dropdown-item onclick="setTheme('blc')">
+          <span slot="icon" class="theme-swatch" style="background:#c0392b;"></span>
+          BLC
+          <span slot="details">White · Red · Gold</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('nord')">
+          <span slot="icon" class="theme-swatch" style="background:#3498db;"></span>
+          Nord
+          <span slot="details">Cool · Minimal · Blue</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item type="checkbox" checked onclick="setTheme('forest')">
+          <span slot="icon" class="theme-swatch" style="background:#4a7c3f;"></span>
+          Forest
+          <span slot="details">Earthy · Green · Warm</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('midnight')">
+          <span slot="icon" class="theme-swatch" style="background:#7c6cf0;"></span>
+          Midnight
+          <span slot="details">Dark · Indigo · Glow</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('vintage')">
+          <span slot="icon" class="theme-swatch" style="background:#7a1f1f;"></span>
+          Vintage
+          <span slot="details">Paper · Burgundy · Serif</span>
+        </wa-dropdown-item>
+        <wa-dropdown-item onclick="setTheme('sunset')">
+          <span slot="icon" class="theme-swatch" style="background:#e85d4a;"></span>
+          Sunset
+          <span slot="details">Coral · Warm · Bold</span>
+        </wa-dropdown-item>
+      </wa-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="card">
+      <div class="card-title">Team Overview</div>
+      <div class="card-sub">Activity across your trainers</div>
+      <div class="period-toggle">
+        <wa-button appearance="plain" class="period-btn active">This Week</wa-button>
+        <wa-button appearance="plain" class="period-btn">Last Week</wa-button>
+        <wa-button appearance="plain" class="period-btn">This Month</wa-button>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-value">6</div><div class="stat-label">Trainers</div></div>
+        <div class="stat"><div class="stat-value">143</div><div class="stat-label">Generations/Week</div></div>
+        <div class="stat"><div class="stat-value">89</div><div class="stat-label">Approved/Week</div></div>
+      </div>
+    </div>
+    <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+      <div class="card-title">Start Creating</div>
+      <div class="card-sub">Generate new classroom materials</div>
+      <div class="btn-row">
+        <wa-button variant="brand" onclick="openLangModal()"><wa-icon name="pen-to-square"></wa-icon> Language Exercise</wa-button>
+        <wa-button variant="brand" onclick="openOccModal()" style="margin-top:8px"><wa-icon name="briefcase"></wa-icon> Occupational Scenario</wa-button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Daily Generations & Approvals</div>
+      <div class="card-sub">Last 7 days</div>
+      <div class="chart-wrap">
+        <canvas id="genChart"></canvas>
+      </div>
+    </div>
+    <div class="card full">
+      <div class="card-title">Recent Activity</div>
+      <div class="card-sub">Generation and system events</div>
+      <div class="log-entry">
+        <span class="log-icon"><wa-icon name="file-export"></wa-icon></span>
+        <span class="log-time">10:32</span>
+        <span class="log-action"><strong>Sarah Chen</strong> exported "Modal Verbs Unit 4" as PPTX</span>
+      </div>
+      <div class="log-entry">
+        <span class="log-icon"><wa-icon name="check-circle"></wa-icon></span>
+        <span class="log-time">10:15</span>
+        <span class="log-action"><strong>Sarah Chen</strong> approved "Unit 4 — Modal Verbs"</span>
+      </div>
+      <div class="log-entry">
+        <span class="log-icon"><wa-icon name="rotate"></wa-icon></span>
+        <span class="log-time">09:50</span>
+        <span class="log-action"><strong>Markus Klein</strong> regenerated 2 blocks in "Email Etiquette"</span>
+      </div>
+      <div class="log-entry">
+        <span class="log-icon"><wa-icon name="right-to-bracket"></wa-icon></span>
+        <span class="log-time">09:45</span>
+        <span class="log-action"><strong>Markus Klein</strong> logged in</span>
+      </div>
+      <div class="log-entry">
+        <span class="log-icon"><wa-icon name="check-circle"></wa-icon></span>
+        <span class="log-time">09:12</span>
+        <span class="log-action"><strong>Anna Larsson</strong> approved "Negotiation Role-play"</span>
+      </div>
+      <div class="log-entry">
+        <span class="log-icon"><wa-icon name="file-export"></wa-icon></span>
+        <span class="log-time">08:55</span>
+        <span class="log-action"><strong>Anna Larsson</strong> exported "Past Simple Worksheet" as PDF</span>
+      </div>
+      <div class="log-entry">
+        <span class="log-icon"><wa-icon name="right-to-bracket"></wa-icon></span>
+        <span class="log-time">08:50</span>
+        <span class="log-action"><strong>Sarah Chen</strong> logged in</span>
+      </div>
+      <div class="log-entry" style="border-bottom:none;padding-bottom:0;">
+        <span class="log-icon"><wa-icon name="pen-to-square"></wa-icon></span>
+        <span class="log-time">08:30</span>
+        <span class="log-action"><strong>Markus Klein</strong> generated "Email Etiquette — Professional Scenario"</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function switchRole(role) {
+  var pages = { trainer: 'trainer-shell.html', manager: 'manager-shell.html', admin: 'admin-shell.html' };
+  if (role === 'manager') return;
+  window.location.href = pages[role];
+}
+</script>
+<script>
+const ctx = document.getElementById('genChart').getContext('2d');
+Chart.register(ChartDataLabels);
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [{
+      label: 'Generations',
+      data: [28, 35, 22, 18, 40, 0, 0],
+      borderColor: '#c0392b',
+      backgroundColor: 'rgba(192, 57, 43, 0.06)',
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: '#c0392b',
+      tension: 0.35,
+      fill: true,
+    }, {
+      label: 'Approvals',
+      data: [22, 30, 18, 15, 36, 0, 0],
+      borderColor: '#2e7d32',
+      backgroundColor: 'rgba(46, 125, 50, 0.06)',
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: '#2e7d32',
+      tension: 0.35,
+      fill: true,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+        align: 'end',
+        labels: {
+          font: { family: 'DM Sans', size: 11 },
+          color: '#787168',
+          boxWidth: 12,
+          padding: 16,
+          usePointStyle: true,
+        }
+      },
+      datalabels: {
+        font: { family: 'DM Sans', size: 9, weight: '600' },
+        color: '#787168',
+        align: 'top',
+        offset: 4,
+        display: function(context) {
+          return context.dataset.data[context.dataIndex] > 0;
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(0,0,0,0.04)' },
+        ticks: { font: { family: 'DM Sans', size: 10 }, color: '#a39a90', stepSize: 10 }
+      },
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: 'DM Sans', size: 10 }, color: '#a39a90' }
+      }
+    }
+  }
+});
+function openLangModal() { document.getElementById('langModal').open = true; }
+function closeLangModal() { document.getElementById('langModal').open = false; }
+function openOccModal() { document.getElementById('occModal').open = true; }
+function closeOccModal() { document.getElementById('occModal').open = false; }
+function setTheme(name) {
+  var link = document.getElementById('theme-css');
+  if (!link) {
+    link = document.createElement('link');
+    link.id = 'theme-css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }
+  if (name === 'blc') { link.href = ''; }
+  else { link.href = 'themes/' + name + '.css'; }
+}
+
+// ── Users / Clients CRUD ─────────────────────────────────────────
+var users = [
+  { firstName: 'Sarah',  lastName: 'Chen',     email: 'sarah.chen@blc.solutions',   roles: ['trainer'] },
+  { firstName: 'Markus', lastName: 'Klein',    email: 'markus.klein@blc.solutions',  roles: ['trainer', 'manager'] },
+  { firstName: 'Anna',   lastName: 'Larsson',  email: 'anna.larsson@blc.solutions',  roles: ['trainer'] },
+  { firstName: 'James',  lastName: 'Mitchell', email: 'james.mitchell@blc.solutions', roles: ['manager'] }
+];
+var clients = [
+  { name: 'Adidas' }, { name: 'BASF' }, { name: 'BMW' }, { name: 'Bosch' },
+  { name: 'Mercedes-Benz' }, { name: 'Siemens' }, { name: 'Volkswagen' }
+];
+var editingUserIdx = null;
+var editingClientIdx = null;
+
+function roleBadges(roles) {
+  if (!roles || !roles.length) return '<span style="color:#a39a90;font-size:12px;">—</span>';
+  return roles.map(function(r){
+    var label = r === 'admin' ? 'Admin' : r === 'manager' ? 'Manager' : 'Trainer';
+    return '<span style="display:inline-block;padding:2px 8px;border-radius:4px;background:#f0ebe5;font-size:11px;font-weight:600;color:#787168;margin-right:4px;">' + label + '</span>';
+  }).join('');
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c){
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+  });
+}
+function renderUsers() {
+  var wrap = document.getElementById('usersTableWrap');
+  document.getElementById('usersCount').textContent = users.length + (users.length === 1 ? ' user' : ' users');
+  if (!users.length) {
+    wrap.innerHTML = '<div class="crud-empty">No users yet. Click <strong>New user</strong> to add one.</div>';
+    return;
+  }
+  var rows = users.map(function(u, i){
+    return '<tr>' +
+      '<td>' + escapeHtml(u.firstName) + '</td>' +
+      '<td>' + escapeHtml(u.lastName) + '</td>' +
+      '<td>' + escapeHtml(u.email) + '</td>' +
+      '<td>' + roleBadges(u.roles) + '</td>' +
+      '<td><div class="crud-actions">' +
+        '<wa-button size="s" appearance="plain" onclick="editUser(' + i + ')" title="Edit"><wa-icon name="pen"></wa-icon></wa-button>' +
+        '<wa-button size="s" appearance="plain" onclick="deleteUser(' + i + ')" title="Delete"><wa-icon name="trash"></wa-icon></wa-button>' +
+      '</div></td></tr>';
+  }).join('');
+  wrap.innerHTML = '<table class="crud-table"><thead><tr>' +
+    '<th>First name</th><th>Last name</th><th>Email</th><th>Roles</th><th style="width:96px;"></th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table>';
+}
+function renderClients() {
+  var wrap = document.getElementById('clientsTableWrap');
+  document.getElementById('clientsCount').textContent = clients.length + (clients.length === 1 ? ' client' : ' clients');
+  if (!clients.length) {
+    wrap.innerHTML = '<div class="crud-empty">No clients yet. Click <strong>New client</strong> to add one.</div>';
+    return;
+  }
+  var rows = clients.map(function(c, i){
+    return '<tr>' +
+      '<td>' + escapeHtml(c.name) + '</td>' +
+      '<td><div class="crud-actions">' +
+        '<wa-button size="s" appearance="plain" onclick="editClient(' + i + ')" title="Edit"><wa-icon name="pen"></wa-icon></wa-button>' +
+        '<wa-button size="s" appearance="plain" onclick="deleteClient(' + i + ')" title="Delete"><wa-icon name="trash"></wa-icon></wa-button>' +
+      '</div></td></tr>';
+  }).join('');
+  wrap.innerHTML = '<table class="crud-table"><thead><tr>' +
+    '<th>Name</th><th style="width:96px;"></th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table>';
+}
+function openUsersModal()    { document.getElementById('usersModal').open = true;    renderUsers(); }
+function closeUsersModal()   { document.getElementById('usersModal').open = false; }
+function openClientsModal()  { document.getElementById('clientsModal').open = true;  renderClients(); }
+function closeClientsModal() { document.getElementById('clientsModal').open = false; }
+function openUserForm() {
+  editingUserIdx = null;
+  document.getElementById('userFormModal').label = 'New user';
+  document.getElementById('userFirst').value = '';
+  document.getElementById('userLast').value = '';
+  document.getElementById('userEmail').value = '';
+  document.getElementById('userPassword').value = '';
+  document.getElementById('userRoleTrainer').checked = false;
+  document.getElementById('userRoleManager').checked = false;
+  document.getElementById('userRoleAdmin').checked = false;
+  document.getElementById('userFormModal').open = true;
+}
+function closeUserForm()  { document.getElementById('userFormModal').open = false; }
+function openClientForm() {
+  editingClientIdx = null;
+  document.getElementById('clientFormModal').label = 'New client';
+  document.getElementById('clientName').value = '';
+  document.getElementById('clientFormModal').open = true;
+}
+function closeClientForm(){ document.getElementById('clientFormModal').open = false; }
+function editClient(i) {
+  var c = clients[i];
+  editingClientIdx = i;
+  document.getElementById('clientFormModal').label = 'Edit client';
+  document.getElementById('clientName').value = c.name;
+  document.getElementById('clientFormModal').open = true;
+}
+function editUser(i) {
+  var u = users[i];
+  editingUserIdx = i;
+  document.getElementById('userFormModal').label = 'Edit user';
+  document.getElementById('userFirst').value = u.firstName;
+  document.getElementById('userLast').value = u.lastName;
+  document.getElementById('userEmail').value = u.email;
+  document.getElementById('userPassword').value = '';
+  document.getElementById('userRoleTrainer').checked = (u.roles || []).indexOf('trainer') !== -1;
+  document.getElementById('userRoleManager').checked = (u.roles || []).indexOf('manager') !== -1;
+  document.getElementById('userRoleAdmin').checked   = (u.roles || []).indexOf('admin')   !== -1;
+  document.getElementById('userFormModal').open = true;
+}
+function saveUser() {
+  var first = document.getElementById('userFirst').value.trim();
+  var last  = document.getElementById('userLast').value.trim();
+  var email = document.getElementById('userEmail').value.trim();
+  var pw    = document.getElementById('userPassword').value;
+  var roles = [];
+  if (document.getElementById('userRoleTrainer').checked) roles.push('trainer');
+  if (document.getElementById('userRoleManager').checked) roles.push('manager');
+  if (document.getElementById('userRoleAdmin').checked)   roles.push('admin');
+  if (!first || !last || !email) { alert('First name, last name, and email are required.'); return; }
+  if (editingUserIdx === null && !pw) { alert('Password is required for new users.'); return; }
+  var record = { firstName: first, lastName: last, email: email, roles: roles };
+  if (editingUserIdx === null) users.push(record);
+  else users[editingUserIdx] = record;
+  closeUserForm();
+  renderUsers();
+}
+function saveClient() {
+  var name = document.getElementById('clientName').value.trim();
+  if (!name) { alert('Client name is required.'); return; }
+  if (editingClientIdx === null) clients.push({ name: name });
+  else clients[editingClientIdx] = { name: name };
+  closeClientForm();
+  renderClients();
+}
+function deleteUser(i) {
+  if (!confirm('Delete user "' + users[i].firstName + ' ' + users[i].lastName + '"?')) return;
+  users.splice(i, 1);
+  renderUsers();
+}
+function deleteClient(i) {
+  if (!confirm('Delete client "' + clients[i].name + '"?')) return;
+  clients.splice(i, 1);
+  renderClients();
+}
+function toggleMobileMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarBackdrop').classList.toggle('show');
+}
+function closeMobileMenu() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarBackdrop').classList.remove('show');
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { closeLangModal(); closeOccModal(); }
+});
+</script>
+<!-- Language Exercise Modal -->
+<wa-dialog id="langModal" label="New Language Exercise" light-dismiss with-footer class="modal-dialog">
+  <span slot="label"><wa-icon name="pen-to-square"></wa-icon> New Language Exercise</span>
+  <div class="modal-body">
+    <div class="field-group">
+      <label for="topic">Topic</label>
+      <wa-input type="text" id="topic" placeholder="e.g. Modal Verbs, Email Etiquette"></wa-input>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="participants">Number of Participants</label>
+        <wa-input type="number" id="participants" value="6" min="1" max="50"></wa-input>
+      </div>
+      <div class="field-group">
+        <label for="level">Target Level</label>
+        <wa-select id="level">
+          <wa-option value="">Select level…</wa-option>
+          <wa-option value="A1">A1 — Beginner</wa-option>
+          <wa-option value="A2">A2 — Elementary</wa-option>
+          <wa-option value="B1">B1 — Intermediate</wa-option>
+          <wa-option value="B2">B2 — Upper Intermediate</wa-option>
+          <wa-option value="C1">C1 — Advanced</wa-option>
+          <wa-option value="C2">C2 — Proficient</wa-option>
+        </wa-select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="classroom">Classroom Exercises</label>
+        <wa-input type="number" id="classroom" value="3" min="0" max="20"></wa-input>
+      </div>
+      <div class="field-group" style="margin-bottom:0;">
+        <label for="selfstudy">Self-Study Exercises</label>
+        <wa-input type="number" id="selfstudy" value="5" min="0" max="30"></wa-input>
+      </div>
+    </div>
+  </div>
+  <div slot="footer" class="modal-footer">
+    <wa-button variant="neutral" onclick="closeLangModal()">Cancel</wa-button>
+    <wa-button variant="brand" onclick="alert('Generation flow — not yet implemented')">
+      <i class="fa-regular fa-wand-magic-sparkles"></i> Generate
+    </wa-button>
+  </div>
+</wa-dialog>
+<!-- Occupational Scenario Modal -->
+<wa-dialog id="occModal" label="New Occupational Scenario" light-dismiss with-footer class="modal-dialog">
+  <span slot="label"><wa-icon name="briefcase"></wa-icon> New Occupational Scenario</span>
+  <div class="modal-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="occ-company">Company</label>
+        <wa-select id="occ-company">
+          <wa-option value="">Select company…</wa-option>
+          <wa-option value="Adidas">Adidas</wa-option>
+          <wa-option value="BASF">BASF</wa-option>
+          <wa-option value="Bayer">Bayer</wa-option>
+          <wa-option value="BMW">BMW</wa-option>
+          <wa-option value="Bosch">Bosch</wa-option>
+          <wa-option value="Mercedes-Benz">Mercedes-Benz</wa-option>
+          <wa-option value="Siemens">Siemens</wa-option>
+          <wa-option value="ThyssenKrupp">ThyssenKrupp</wa-option>
+          <wa-option value="Volkswagen">Volkswagen</wa-option>
+          <wa-option value="Zalando">Zalando</wa-option>
+        </wa-select>
+      </div>
+      <div class="field-group">
+        <label for="occ-dept">Department / Occupation</label>
+        <wa-input type="text" id="occ-dept" placeholder="e.g. Logistics Manager, HR"></wa-input>
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="occ-scenario">Scenario Example</label>
+      <wa-input type="text" id="occ-scenario" placeholder="e.g. Supplier negotiation, onboarding meeting"></wa-input>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="occ-participants">Number of Participants</label>
+        <wa-input type="number" id="occ-participants" value="6" min="1" max="50"></wa-input>
+      </div>
+      <div class="field-group">
+        <label for="occ-level">Target Level</label>
+        <wa-select id="occ-level">
+          <wa-option value="">Select level…</wa-option>
+          <wa-option value="A1">A1 — Beginner</wa-option>
+          <wa-option value="A2">A2 — Elementary</wa-option>
+          <wa-option value="B1">B1 — Intermediate</wa-option>
+          <wa-option value="B2">B2 — Upper Intermediate</wa-option>
+          <wa-option value="C1">C1 — Advanced</wa-option>
+          <wa-option value="C2">C2 — Proficient</wa-option>
+        </wa-select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="occ-classroom">Classroom Exercises</label>
+        <wa-input type="number" id="occ-classroom" value="3" min="0" max="20"></wa-input>
+      </div>
+      <div class="field-group" style="margin-bottom:0;">
+        <label for="occ-selfstudy">Self-Study Exercises</label>
+        <wa-input type="number" id="occ-selfstudy" value="5" min="0" max="30"></wa-input>
+      </div>
+    </div>
+    <div class="field-group" style="margin-bottom:0;">
+      <label for="occ-vocab">Additional Specialist Vocabulary Request</label>
+        <wa-textarea id="occ-vocab" rows="3" placeholder="e.g. technical terms, industry jargon, specific phrases to include…"></wa-textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <wa-button variant="neutral" onclick="closeOccModal()">Cancel</wa-button>
+      <wa-button variant="brand" onclick="alert('Generation flow — not yet implemented')">
+        <i class="fa-regular fa-wand-magic-sparkles"></i> Generate
+      </wa-button>
+    </div>
+</wa-dialog>
+<!-- Users Modal -->
+<wa-dialog id="usersModal" label="Users" light-dismiss with-footer class="modal-dialog" style="--width: 720px;">
+  <span slot="label"><wa-icon name="user-gear"></wa-icon> Users</span>
+  <div class="modal-body">
+    <div class="crud-toolbar">
+      <h4 id="usersCount">0 users</h4>
+      <wa-button variant="brand" size="s" onclick="openUserForm()">
+        <wa-icon name="plus"></wa-icon> New user
+      </wa-button>
+    </div>
+    <div id="usersTableWrap"></div>
+  </div>
+  <div slot="footer" class="modal-footer">
+    <wa-button variant="neutral" onclick="closeUsersModal()">Close</wa-button>
+  </div>
+</wa-dialog>
+<!-- User Form Modal -->
+<wa-dialog id="userFormModal" label="New user" light-dismiss with-footer class="modal-dialog" style="--width: 480px;">
+  <div class="modal-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field-group">
+        <label for="userFirst">First name</label>
+        <wa-input id="userFirst" placeholder="e.g. Sarah"></wa-input>
+      </div>
+      <div class="field-group">
+        <label for="userLast">Last name</label>
+        <wa-input id="userLast" placeholder="e.g. Chen"></wa-input>
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="userEmail">Email</label>
+      <wa-input id="userEmail" type="email" placeholder="name@blc.solutions"></wa-input>
+    </div>
+    <div class="field-group">
+      <label for="userPassword">Password</label>
+      <wa-input id="userPassword" type="password" password-toggle placeholder="············"></wa-input>
+    </div>
+    <div class="field-group" style="margin-bottom:0;">
+      <label>Roles (multi-select)</label>
+      <div class="crud-role-group">
+        <wa-checkbox id="userRoleTrainer">Trainer</wa-checkbox>
+        <wa-checkbox id="userRoleManager">Manager</wa-checkbox>
+        <wa-checkbox id="userRoleAdmin">Administrator</wa-checkbox>
+      </div>
+    </div>
+  </div>
+  <div slot="footer" class="modal-footer">
+    <wa-button variant="neutral" onclick="closeUserForm()">Cancel</wa-button>
+    <wa-button variant="brand" onclick="saveUser()">Save</wa-button>
+  </div>
+</wa-dialog>
+<!-- Clients Modal -->
+<wa-dialog id="clientsModal" label="Clients" light-dismiss with-footer class="modal-dialog" style="--width: 560px;">
+  <span slot="label"><wa-icon name="building"></wa-icon> Clients</span>
+  <div class="modal-body">
+    <div class="crud-toolbar">
+      <h4 id="clientsCount">0 clients</h4>
+      <wa-button variant="brand" size="s" onclick="openClientForm()">
+        <wa-icon name="plus"></wa-icon> New client
+      </wa-button>
+    </div>
+    <div id="clientsTableWrap"></div>
+  </div>
+  <div slot="footer" class="modal-footer">
+    <wa-button variant="neutral" onclick="closeClientsModal()">Close</wa-button>
+  </div>
+</wa-dialog>
+<!-- Client Form Modal -->
+<wa-dialog id="clientFormModal" label="New client" light-dismiss with-footer class="modal-dialog" style="--width: 420px;">
+  <div class="modal-body">
+    <div class="field-group" style="margin-bottom:0;">
+      <label for="clientName">Name</label>
+      <wa-input id="clientName" placeholder="e.g. BMW"></wa-input>
+    </div>
+  </div>
+  <div slot="footer" class="modal-footer">
+    <wa-button variant="neutral" onclick="closeClientForm()">Cancel</wa-button>
+    <wa-button variant="brand" onclick="saveClient()">Save</wa-button>
+  </div>
+</wa-dialog>
+<div class="watermark">Illustrative prototype — not indicative of final functionality</div>
+</body>
+</html>

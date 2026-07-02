@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" class="wa-theme-default wa-palette-default wa-brand-red">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLC Content Forge — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://ka-f.webawesome.com/webawesome@3.9.0/styles/themes/default.css">
+<script src="https://kit.fontawesome.com/3edb93cefc.js" crossorigin="anonymous"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/input/input.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/icon/icon.js"></script>
+<script type="module" src="https://ka-f.webawesome.com/webawesome@3.9.0/components/button/button.js"></script>
+<style>
+  :root {
+    --wa-color-brand-50: oklch(50% 0.18 30);
+    --wa-color-brand-60: oklch(42% 0.16 30);
+    --wa-font-family-heading: 'Playfair Display', serif;
+    --wa-font-family-sans: 'DM Sans', -apple-system, sans-serif;
+    --wa-radius-s: 6px;
+    --wa-radius-m: 8px;
+    --wa-radius-l: 12px;
+    --wa-radius-xl: 16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: #fafaf9;
+    color: #1c1917;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+  .bg-panel {
+    flex: 1;
+    background: linear-gradient(135deg, #fafaf9 0%, #f5f2ef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .photo-grid {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.08;
+  }
+  .photo-grid-inner {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+    padding: 24px;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-2deg) scale(1.05);
+  }
+  .photo-cell {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #d4c9bd, #e8ddd2);
+    overflow: hidden;
+    position: relative;
+  }
+  .photo-cell:nth-child(3n) { background: linear-gradient(135deg, #e8ddd2, #d4c9bd); }
+  .photo-cell:nth-child(5n) { background: linear-gradient(135deg, #ddd0c2, #c9bcaa); }
+  .photo-cell:nth-child(7n) { background: linear-gradient(135deg, #c9bcaa, #ddd0c2); }
+  .photo-cell .thumb-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0,0,0,0.04);
+    font-size: 16px;
+  }
+  .login-card {
+    position: relative;
+    width: 420px;
+    padding: 48px 44px 44px;
+    background: #ffffff;
+    border: 1px solid #e8e2dc;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+    z-index: 1;
+  }
+  .login-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 48px; right: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c0392b, #b48c50, transparent);
+    border-radius: 0 0 3px 3px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .brand-logo { height: 34px; }
+  .brand-logo img { height: 100%; width: auto; display: block; }
+  .brand-divider {
+    width: 1px; height: 28px;
+    background: #e0d8d0;
+  }
+  .brand-sub {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #787168;
+    letter-spacing: 0.03em;
+  }
+  .brand-sub span { color: #b48c50; }
+  h1 {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    color: #1c1917;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #787168;
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+  .field-group { margin-bottom: 18px; }
+  wa-input {
+    width: 100%;
+  }
+  .field-group wa-input::part(base) {
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    border: 1px solid #e0d8d0;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field-group wa-input:focus-within::part(base) {
+    border-color: #b48c50;
+    box-shadow: 0 0 0 3px rgba(180, 140, 80, 0.08);
+  }
+  .field-group wa-input::part(input) {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    padding: 10px 14px;
+  }
+  .field-group wa-input::part(start) {
+    padding-left: 4px;
+    color: #a39a90;
+  }
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #787168;
+    margin-bottom: 8px;
+  }
+  input::placeholder { color: #a39a90; }
+  .login-btn::part(base) {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 24px;
+    border-radius: 8px;
+  }
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 12px;
+    color: #a39a90;
+  }
+  .hero-panel { display: none; }
+  @media (min-width: 960px) {
+    .hero-panel {
+      display: flex;
+      width: 440px;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 56px;
+      border-left: 1px solid #e8e2dc;
+      background: #ffffff;
+    }
+    .hero-panel h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      color: #1c1917;
+    }
+    .hero-panel .tagline {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #787168;
+      margin-bottom: 4px;
+    }
+    .hero-panel .tagline strong { color: #c0392b; font-weight: 500; }
+    .hero-panel .blc-ref {
+      font-size: 12px;
+      color: #a39a90;
+      letter-spacing: 0.04em;
+    }
+    .hero-panel .features { margin-top: 40px; display: flex; flex-direction: column; gap: 12px; }
+    .hero-panel .feature {
+      display: flex;
+      gap: 14px;
+      padding: 16px;
+      background: #fafaf9;
+      border-radius: 8px;
+      border: 1px solid #e8e2dc;
+    }
+    .hero-panel .feature-icon {
+      width: 36px; height: 36px;
+      min-width: 36px;
+      border-radius: 8px;
+      background: #f0ebe5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: #c0392b;
+    }
+    .hero-panel .feature-text { font-size: 13px; color: #787168; line-height: 1.5; }
+    .hero-panel .feature-text strong { color: #1c1917; font-weight: 600; }
+  }
+  @media (max-width: 959px) {
+    .photo-grid-inner {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+  }
+  .watermark {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    text-align: center;
+    padding: 8px;
+    font-size: 10px;
+    color: #a39a90;
+    letter-spacing: 0.04em;
+    background: rgba(250,250,249,0.85);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    border-top: 1px solid #e8e2dc;
+  }
+</style>
+</head>
+<body>
+<div class="bg-panel">
+  <div class="photo-grid">
+    <div class="photo-grid-inner">
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+      <div class="photo-cell"><div class="thumb-placeholder"><wa-icon name="image"></wa-icon></div></div>
+    </div>
+  </div>
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="https://www.blc.solutions/wp-content/uploads/2021/03/BLC-Language-Solutions-JPG.jpg" alt="BLC Language Solutions" onerror="this.style.display='none'">
+      </div>
+      <div class="brand-divider"></div>
+      <div class="brand-sub">Content <span>Forge</span></div>
+    </div>
+    <h1>Welcome back</h1>
+    <p class="subtitle">Sign in to your trainer account</p>
+    <form id="loginForm" novalidate>
+      <div class="field-group">
+        <label for="username">Username</label>
+        <wa-input name="username" placeholder="e.g. sarah.chen" autocomplete="username" id="username" appearance="filled" required>
+          <wa-icon name="user" slot="start"></wa-icon>
+        </wa-input>
+      </div>
+      <div class="field-group">
+        <label for="password">Password</label>
+        <wa-input name="password" type="password" placeholder="············" autocomplete="current-password" id="password" appearance="filled" password-toggle required>
+          <wa-icon name="lock" slot="start"></wa-icon>
+        </wa-input>
+      </div>
+      <wa-button type="submit" variant="brand" class="login-btn" style="width:100%;margin-top:24px;display:flex;align-items:center;justify-content:center;gap:8px;">
+        Sign in
+        <wa-icon name="arrow-right" slot="end"></wa-icon>
+      </wa-button>
+    </form>
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (e.target.checkValidity()) {
+          window.location.href = 'trainer-shell.html';
+        }
+      });
+    </script>
+    <p class="footer">Authorised trainers and staff only</p>
+  </div>
+</div>
+<div class="hero-panel">
+  <h2>Help your company<br>find its voice.</h2>
+  <p class="tagline">Tailor-made digital learning with <strong>['blc:] empower</strong></p>
+  <p class="blc-ref">BLC Language Solutions — since 2000</p>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon"><wa-icon name="pen-to-square"></wa-icon></div>
+      <div class="feature-text"><strong>Language Practice</strong><br>Generate exercises aligned to your curriculum and corpus-validated content</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon"><wa-icon name="briefcase"></wa-icon></div>
+      <div class="feature-text"><strong>Professional Scenarios</strong><br>Create role-play, case studies and authentic business materials</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon"><wa-icon name="file-powerpoint"></wa-icon></div>
+      <div class="feature-text"><strong>Branded Export</strong><br>Deliver PPTX and PDF with your organisation's identity</div>
+    </div>
+  </div>
+</div>
+<div class="watermark">Illustrative prototype — not indicative of final functionality</div>
+</body>
+</html>
